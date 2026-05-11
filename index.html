@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0">
+
+  <title>Auto Control</title>
+
+  <link rel="stylesheet"
+    href="css/style.css">
+
+</head>
+
+<body>
+
+  <div class="container">
+
+    <h1>Controle do Carro</h1>
+
+    <input
+      type="text"
+      id="servico"
+      placeholder="Serviço realizado">
+
+    <input
+      type="file"
+      id="fotoServico"
+      accept="image/*">
+
+    <input
+      type="number"
+      id="kmAtual"
+      placeholder="KM atual">
+
+    <input
+      type="number"
+      id="mediaTroca"
+      placeholder="Troca em quantos KM">
+
+    <button onclick="salvarServico()">
+      Salvar Serviço
+    </button>
+
+    <div id="listaServicos"></div>
+
+  </div>
+
+  <script src="js/script.js"></script>
+
+</body>
+
+</html>
+
+
+
