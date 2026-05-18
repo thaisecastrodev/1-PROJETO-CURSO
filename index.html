@@ -1,59 +1,72 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
-
+<html lang="pt-br">
 <head>
-
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <meta name="viewport"
-    content="width=device-width, initial-scale=1.0">
 
-  <title>Auto Control</title>
+  <title>Resumo Inteligente IA</title>
 
-  <link rel="stylesheet"
-    href="css/style.css">
 
+  <link rel="stylesheet" href="css/style.css">
 </head>
+
 
 <body>
 
+
   <div class="container">
 
-    <h1>Controle do Carro</h1>
 
-    <input
-      type="text"
-      id="servico"
-      placeholder="Serviço realizado">
+    <h1>Resumo Inteligente IA</h1>
 
-    <input
-      type="file"
-      id="fotoServico"
-      accept="image/*">
 
-    <input
-      type="number"
-      id="kmAtual"
-      placeholder="KM atual">
+    <textarea
+      id="texto"
+      placeholder="Cole ou escreva seu conteúdo aqui..."
+    ></textarea>
 
-    <input
-      type="number"
-      id="mediaTroca"
-      placeholder="Troca em quantos KM">
 
-    <button onclick="salvarServico()">
-      Salvar Serviço
+    <select id="categoria">
+
+
+      <option value="Bíblia">Bíblia</option>
+
+
+      <option value="Contabilidade">
+        Contabilidade
+      </option>
+
+
+      <option value="Programação">
+        Programação
+      </option>
+
+
+      <option value="Estudos">
+        Estudos
+      </option>
+
+
+    </select>
+
+
+    <input type="file" id="arquivo">
+
+
+    <button onclick="gerarResumo()">
+      Gerar Resumo
     </button>
 
-    <div id="listaServicos"></div>
+
+    <div id="historico"></div>
+
 
   </div>
 
+
   <script src="js/script.js"></script>
 
+
 </body>
-
 </html>
-
-
-

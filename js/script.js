@@ -1,59 +1,36 @@
-function salvarServico() {
-  
+function gerarResumo() {
 
-  let servico =
-    document.getElementById("servico").value;
+  // Pegando texto
+  const texto = document.getElementById("texto").value;
 
-  let kmAtual =
-    Number(document.getElementById("kmAtual").value);
+  // Pegando categoria
+  const categoria = document.getElementById("categoria").value;
 
-  let mediaTroca =
-    Number(document.getElementById("mediaTroca").value);
+  // Área do histórico
+  const historico = document.getElementById("historico");
 
-  let foto =
-    document.getElementById("fotoServico").files[0];
-
-  let proximaTroca = kmAtual + mediaTroca;
-
-  let lista =
-    document.getElementById("listaServicos");
-
-  let leitor = new FileReader();
-
-  leitor.onload = function (e) {
-
-    let cardId = Date.now(); // id único
-
-    lista.innerHTML += `
-      <div class="card" id="card-${cardId}">
-
-        <h3>${servico}</h3>
-
-        <p>KM Atual: ${kmAtual}</p>
-
-        <p>Próxima troca: ${proximaTroca} KM</p>
-
-        <img src="${e.target.result}" width="100%" style="margin-top:10px;border-radius:10px;">
-
-        <button onclick="excluirServico(${cardId})"
-          style="
-            margin-top:10px;
-            background:red;
-            color:white;
-            border:none;
-            padding:10px;
-            width:100%;
-            border-radius:8px;
-          ">
-          Excluir
-        </button>
-
-      </div>
-    `;
-  };
-
-  if (foto) {
-    leitor.readAsDataURL(foto);
+  // Verificação simples
+  if (texto.trim() === "") {
+    alert("Digite algum conteúdo.");
+    return;
   }
-}
 
+  // Criando card
+  const card = document.createElement("div");
+
+  // Classe CSS
+  card.classList.add("card");
+
+  // Conteúdo do card
+  card.innerHTML = `
+    <h3>${categoria}</h3>
+    <p>${texto}</p>
+  `;
+
+  // Adicionando card na tela
+  historico.appendChild(card);
+
+  // Limpando textarea
+  document.getElementById("texto").value = "";
+
+}
