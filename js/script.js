@@ -59,8 +59,16 @@ function criarCard(texto, categoria) {
   card.innerHTML = `
     <h3>${categoria}</h3>
     <p>${texto}</p>
+
+    <button onclick="excluirCard(this)">Excluir</button>
   `;
 
   historico.appendChild(card);
+
+}
+
+function excluirCard(botao) {
+  const card = botao.parentElement;
+  card.remove();
 
 }
