@@ -1,72 +1,37 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-
-  <title>Resumo Inteligente IA</title>
-
-
-  <link rel="stylesheet" href="css/style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meu NotebookLM Pessoal</title>
+    <!-- Vincula seu arquivo de estilos externo -->
+    <link rel="stylesheet" href="css/style.css">
 </head>
-
-
 <body>
 
+    <!-- Lateral: Onde você alimenta o conhecimento do Notebook -->
+    <div id="sidebar">
+        <h3>Fontes de Conhecimento</h3>
+        <p style="font-size: 12px; color: #666; margin-bottom: 10px;">Cole o texto do seu documento ou artigo abaixo:</p>
+        <textarea id="context-database" placeholder="Cole os dados, notas ou textos aqui..."></textarea>
+        <button onclick="salvarContexto()">Fixar Contexto</button>
+        <p id="status" style="font-size: 12px; color: green; margin-top: 5px; display: none;">✓ Contexto carregado!</p>
+    </div>
 
-  <div class="container">
+    <!-- Central: Chat focado nos seus documentos -->
+    <div id="main">
+        <div id="chat-container">
+            <div class="message ai">Olá! Cole seus documentos na barra lateral e me faça perguntas sobre eles.</div>
+        </div>
+        <div id="input-area">
+            <input type="text" id="user-question" placeholder="Pergunte algo sobre seus documentos...">
+            <button onclick="enviarPergunta()">Perguntar</button>
+        </div>
+    </div>
 
-
-    <h1>Resumo Inteligente IA</h1>
-
-
-    <textarea
-      id="texto"
-      placeholder="Cole ou escreva seu conteúdo aqui..."
-    ></textarea>
-
-
-    <select id="categoria">
-
-
-      <option value="Bíblia">Bíblia</option>
-
-
-      <option value="Contabilidade">
-        Contabilidade
-      </option>
-
-
-      <option value="Programação">
-        Programação
-      </option>
-
-
-      <option value="Estudos">
-        Estudos
-      </option>
-
-
-    </select>
-
-
-    <input type="file" id="arquivo">
-
-
-    <button onclick="gerarResumo()">
-      Gerar Resumo
-    </button>
-
-
-    <div id="historico"></div>
-
-
-  </div>
-
-
-  <script src="js/script.js"></script>
-
-
+    <!-- Vincula seu arquivo de lógica externo -->
+    <script src="config.js"></script>
+    
+    <script src="js/script.js"></script>
 </body>
 </html>

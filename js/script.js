@@ -1,74 +1,51 @@
-// Carregar resumos salvos ao abrir sistema
-window.onload = function () {
 
-  const dadosSalvos = localStorage.getItem("resumos");
+// A variável da chave já vem do config.js (window.API_KEY)
 
-  if (dadosSalvos) {
+async function enviarPergunta() {
+    const inputField = document.getElementById("user-question");
+    const question = inputField.value.trim();
 
-    const resumos = JSON.parse(dadosSalvos);
+    
+    // URL usando o modelo que o chatgpt indicou 20-05-2026  const API_URL =
+    const API_URL ="https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key="+ window.API_KEY;
+    
+    if (!question) return;
 
-    resumos.forEach(item => {
-      criarCard(item.texto, item.categoria);
-    });
+    // URL usando o modelo que o chatgpt indicou 20-05-2026  const API_URL =
 
-  }
 
-};
 
-// Função botão
-function gerarResumo() {
+    try {
+        const response = await fetch(API_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                contents: [{ parts: [{ text: question }] }]
+            })
+        });
 
-  const texto = document.getElementById("texto").value;
+        const data = await response.json();
+        console.log("Resposta do Google:", data); // Isso vai mostrar a resposta no console
+        
+        // Se a resposta chegar, você verá o texto aqui
+        if (data.candidates) {
+            console.log("IA respondeu:", data.candidates[0].content.parts[0].text);
+        }
+    } catch (error) {
+        console.error("Erro na requisição:", error);
+    }
+}
 
-  const categoria = document.getElementById("categoria").value;
+            
+function salvarContexto() {
 
-  if (texto.trim() === "") {
-    alert("Digite algum conteúdo.");
-    return;
-  }
+    const contexto =
+        document.getElementById("context-database").value;
 
-  // Criar card visual
-  criarCard(texto, categoria);
+    localStorage.setItem("contexto", contexto);
 
-  // Pegar dados já salvos
-  let resumos = JSON.parse(localStorage.getItem("resumos")) || [];
-
-  // Adicionar novo resumo
-  resumos.push({
-    texto: texto,
-    categoria: categoria
-  });
-
-  // Salvar novamente
-  localStorage.setItem("resumos", JSON.stringify(resumos));
-
-  // Limpar campo
-  document.getElementById("texto").value = "";
+    document.getElementById("status").style.display = "block";
 
 }
 
-// Função criar card
-function criarCard(texto, categoria) {
 
-  const historico = document.getElementById("historico");
-
-  const card = document.createElement("div");
-
-  card.classList.add("card");
-
-  card.innerHTML = `
-    <h3>${categoria}</h3>
-    <p>${texto}</p>
-
-    <button onclick="excluirCard(this)">Excluir</button>
-  `;
-
-  historico.appendChild(card);
-
-}
-
-function excluirCard(botao) {
-  const card = botao.parentElement;
-  card.remove();
-
-}
