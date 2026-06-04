@@ -1,37 +1,193 @@
+<!-- 
+    ========================================
+    LOJA ONLINE - HTML
+    ========================================
+    Este é o arquivo HTML principal da loja
+    Estrutura: Header + Formulário + Produtos + Carrinho Modal
+    ======================================== 
+-->
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+    <!-- Configurações básicas do documento -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Meu NotebookLM Pessoal</title>
-    <!-- Vincula seu arquivo de estilos externo -->
+    <title>🛒 Minha Loja Online</title>
+    <!-- Importar arquivo CSS -->
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+    <!-- Container principal da aplicação -->
+    <div class="container">
+        <!-- HEADER: Título e botão do carrinho -->
+        <header class="header">
+            <div class="header-content">
+                <!-- Título da loja -->
+                <h1>🛒 Minha Loja Online</h1>
+                <!-- Botões do header -->
+                <div class="cart-info">
+                    <!-- Botão para ver alertas de reposição -->
+                    <button class="alert-btn" onclick="abrirAlertaReposicao()" id="alert-header-btn" style="display: none;">
+                        ⚠️ Reposição <span id="alert-count" class="alert-indicator">0</span>
+                    </button>
+                    <!-- Botão para abrir/fechar o carrinho -->
+                    <button class="cart-btn" onclick="toggleCart()">
+                        🛒 Carrinho 
+                        <!-- Badge mostrando quantidade de itens no carrinho -->
+                        <span id="cart-count" class="cart-count">0</span>
+                    </button>
+                </div>
+            </div>
+        </header>
 
-    <!-- Lateral: Onde você alimenta o conhecimento do Notebook -->
-    <div id="sidebar">
-        <h3>Fontes de Conhecimento</h3>
-        <p style="font-size: 12px; color: #666; margin-bottom: 10px;">Cole o texto do seu documento ou artigo abaixo:</p>
-        <textarea id="context-database" placeholder="Cole os dados, notas ou textos aqui..."></textarea>
-        <button onclick="salvarContexto()">Fixar Contexto</button>
-        <p id="status" style="font-size: 12px; color: green; margin-top: 5px; display: none;">✓ Contexto carregado!</p>
+        <!-- Conteúdo principal da página -->
+        <main class="main-content">
+            <!-- 
+                SEÇÃO 1: CADASTRO DE PRODUTOS
+                Formulário onde o usuário pode adicionar novos produtos
+                Campos: Nome, Preço, Descrição
+            -->
+            <section class="admin-section">
+                <div class="form-container">
+                    <h2>📦 Cadastrar Novo Produto</h2>
+                    <!-- Formulário de cadastro (ao enviar, chama função adicionarProduto) -->
+                    <form onsubmit="adicionarProduto(event)">
+                        <!-- Campo de entrada para o nome do produto -->
+                        <div class="form-group">
+                            <label for="product-name">Nome do Produto:</label>
+                            <input type="text" id="product-name" placeholder="Ex: Notebook" required>
+                        </div>
+
+                        <!-- Campo de entrada para o preço (número decimal) -->
+                        <div class="form-group">
+                            <label for="product-price">Preço (R$):</label>
+                            <input type="number" id="product-price" placeholder="Ex: 2500.00" step="0.01" min="0" required>
+                        </div>
+
+                        <!-- Campo de entrada para a descrição (texto longo) -->
+                        <div class="form-group">
+                            <label for="product-description">Descrição:</label>
+                            <textarea id="product-description" placeholder="Descreva o produto..." rows="3" required></textarea>
+                        </div>
+
+                        <!-- Campo para quantidade em estoque -->
+                        <div class="form-group">
+                            <label for="product-stock">Quantidade em Estoque:</label>
+                            <input type="number" id="product-stock" placeholder="Ex: 50" min="0" required>
+                        </div>
+
+                        <!-- Campo para quantidade mínima de alerta -->
+                        <div class="form-group">
+                            <label for="product-alert">Quantidade Mínima de Alerta (para repor):</label>
+                            <input type="number" id="product-alert" placeholder="Ex: 10" min="0" required>
+                        </div>
+
+                        <!-- Campo para valor do frete -->
+                        <div class="form-group">
+                            <label for="product-shipping">Valor de Frete por KM (R$/km):</label>
+                            <input type="number" id="product-shipping" placeholder="Ex: 2.50" step="0.01" min="0" required>
+                        </div>
+
+                        <!-- Botão para enviar o formulário -->
+                        <button type="submit" class="btn-submit">➕ Adicionar Produto</button>
+                    </form>
+                </div>
+            </section>
+
+            <!-- 
+                SEÇÃO 2: LISTAGEM DE PRODUTOS
+                Grid que mostra todos os produtos cadastrados
+                Cada produto é exibido em um card
+            -->
+            <section class="products-section">
+                <h2>📋 Produtos Disponíveis</h2>
+                <!-- Container onde os produtos serão renderizados dinamicamente via JavaScript -->
+                <div id="products-grid" class="products-grid">
+                    <p class="empty-message">Nenhum produto cadastrado ainda. Adicione um acima!</p>
+                </div>
+            </section>
+        </main>
+
+        <!-- 
+            SEÇÃO 3: CARRINHO (MODAL)
+            Janela flutuante que mostra os itens do carrinho
+            O usuário pode ver quantidade, preço total e finalizar compra
+        -->
+        <div id="cart-modal" class="modal">
+            <div class="modal-content">
+                <!-- Botão para fechar o modal -->
+                <button class="close-btn" onclick="toggleCart()">✕</button>
+                <h2>🛒 Meu Carrinho</h2>
+                <!-- Container onde os itens do carrinho serão exibidos -->
+                <div id="cart-items" class="cart-items">
+                    <p class="empty-message">Seu carrinho está vazio</p>
+                </div>
+                <!-- Opções de entrega -->
+                <div class="shipping-options">
+                    <h3>🚚 Calcular Entrega</h3>
+                    <div class="shipping-group">
+                        <label>
+                            <input type="radio" name="shipping-type" value="distancia" checked onchange="atualizarOpcaoEntrega()">
+                            Frete por Distância (KM)
+                        </label>
+                        <label>
+                            <input type="radio" name="shipping-type" value="cep" onchange="atualizarOpcaoEntrega()">
+                            Calcular por CEP
+                        </label>
+                    </div>
+                    <div id="distance-input" style="display: flex;">
+                        <input type="number" id="distance-field" placeholder="Digite a distância em KM" min="0" step="0.1">
+                        <button onclick="calcularFretePorDistancia()">📍 Calcular</button>
+                    </div>
+                    <div id="cep-input" style="display: none;">
+                        <input type="text" id="cep-field" placeholder="Digite seu CEP" maxlength="8">
+                        <button onclick="calcularFretePorCEP()">🔍 Calcular</button>
+                    </div>
+                </div>
+
+                <!-- Resumo de valores -->
+                <div class="price-summary">
+                    <div class="summary-item">
+                        <span>Subtotal:</span>
+                        <span id="cart-subtotal">R$ 0.00</span>
+                    </div>
+                    <div class="summary-item">
+                        <span>Frete:</span>
+                        <span id="cart-shipping">R$ 0.00</span>
+                    </div>
+                    <div class="summary-item total">
+                        <strong>Total:</strong>
+                        <strong id="cart-total">R$ 0.00</strong>
+                    </div>
+                </div>
+
+                <!-- Rodapé do modal com botões -->
+                <div class="cart-footer">
+                    <!-- Botão para finalizar a compra -->
+                    <button class="btn-checkout" onclick="finalizarCompra()">💳 Finalizar Compra</button>
+                    <!-- Botão para limpar todos os itens do carrinho -->
+                    <button class="btn-clear" onclick="limparCarrinho()">🗑️ Limpar Carrinho</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 
+            MODAL DE ALERTAS DE REPOSIÇÃO
+            Mostra produtos com estoque abaixo do mínimo
+        -->
+        <div id="alert-modal" class="modal">
+            <div class="modal-content alert-content">
+                <button class="close-btn" onclick="fecharAlertaReposicao()">✕</button>
+                <h2>⚠️ Alertas de Reposição</h2>
+                <div id="alert-items" class="alert-items">
+                    <p class="empty-message">Todos os produtos têm estoque adequado!</p>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <!-- Central: Chat focado nos seus documentos -->
-    <div id="main">
-        <div id="chat-container">
-            <div class="message ai">Olá! Cole seus documentos na barra lateral e me faça perguntas sobre eles.</div>
-        </div>
-        <div id="input-area">
-            <input type="text" id="user-question" placeholder="Pergunte algo sobre seus documentos...">
-            <button onclick="enviarPergunta()">Perguntar</button>
-        </div>
-    </div>
-
-    <!-- Vincula seu arquivo de lógica externo -->
-    <script src="config.js"></script>
-    
+    <!-- Importar arquivo JavaScript com a lógica da aplicação -->
     <script src="js/script.js"></script>
 </body>
 </html>
